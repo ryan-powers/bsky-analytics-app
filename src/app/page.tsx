@@ -61,7 +61,7 @@ export default function Home() {
         setPosts(json.posts);
         setProfile(json.profile);
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong.');
       setPosts([]);
     } finally {
