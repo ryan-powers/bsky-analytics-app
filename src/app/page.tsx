@@ -202,7 +202,13 @@ export default function Home() {
           Enter any Bluesky handle to view engagement metrics. Username only is fine, the site will
           auto-complete the handle.
         </p>
-        <div className="flex gap-2 items-center mb-6">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            fetchAnalytics();
+          }}
+          className="flex gap-2 items-center mb-6"
+        >
           <input
             value={handle}
             onChange={(e) => setHandle(e.target.value)}
@@ -210,13 +216,13 @@ export default function Home() {
             className="flex-grow border p-2 rounded"
           />
           <button
-            onClick={fetchAnalytics}
+            type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded"
             disabled={loading}
           >
             {loading ? "Loading..." : "Get Analytics"}
           </button>
-        </div>
+        </form>
 
         {/* Error message */}
         {error && <p className="text-gray-900 font-semibold">{error}</p>}
