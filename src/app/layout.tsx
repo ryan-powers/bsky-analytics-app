@@ -17,6 +17,22 @@ export const metadata: Metadata = {
   description: "Analyze engagement metrics for Bluesky posts",
   icons: {
     icon: "/browser_icon.png"
+  },
+  openGraph: {
+    title: 'bskyStats',
+    description: 'Analyze engagement metrics for Bluesky posts',
+    images: [{
+      url: '/logo_square.png',
+      width: 1200,
+      height: 1200,
+      alt: 'bskyStats'
+    }]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'bskyStats',
+    description: 'Analyze engagement metrics for Bluesky posts',
+    images: ['/logo_square.png']
   }
 };
 
