@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "bskyStats",
-  description: "Analyze engagement metrics for Bluesky posts",
+  description: "Analyze engagement metrics for Bluesky accounts",
   icons: {
     icon: "/browser_icon.png"
   },
   openGraph: {
     title: 'bskyStats',
-    description: 'Analyze engagement metrics for Bluesky posts',
+    description: 'Analyze engagement metrics for Bluesky accounts',
     images: [{
       url: '/logo_square.png',
       width: 1200,
