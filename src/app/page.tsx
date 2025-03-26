@@ -24,6 +24,13 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
+const calculateChange = (current: number[], previous: number[]) => {
+  const currentAvg = current.length ? current.reduce((a, b) => a + b, 0) / current.length : 0;
+  const previousAvg = previous.length ? previous.reduce((a, b) => a + b, 0) / previous.length : 0;
+  
+  if (!previousAvg) return null;
+  return ((currentAvg - previousAvg) / previousAvg) * 100;
+};
 
 export default function Home() {
 
@@ -129,6 +136,34 @@ export default function Home() {
   //Check if data is loaded
   const dataLoaded = profile && posts.length > 0;
 
+  const getChangePercentages = () => {
+    if (daysBack === 0) return { engagement: null, likes: null, reposts: null };
+
+    const now = new Date();
+    const cutoff = new Date();
+    cutoff.setDate(now.getDate() - daysBack);
+    const midpoint = new Date(cutoff.getTime() + (now.getTime() - cutoff.getTime()) / 2);
+
+    const recentPosts = filteredPosts.filter(p => new Date(p.createdAt) >= midpoint);
+    const olderPosts = filteredPosts.filter(p => new Date(p.createdAt) < midpoint && new Date(p.createdAt) >= cutoff);
+
+    return {
+      engagement: calculateChange(
+        recentPosts.map(p => p.likes + p.reposts + p.replies),
+        olderPosts.map(p => p.likes + p.reposts + p.replies)
+      ),
+      likes: calculateChange(
+        recentPosts.map(p => p.likes),
+        olderPosts.map(p => p.likes)
+      ),
+      reposts: calculateChange(
+        recentPosts.map(p => p.reposts),
+        olderPosts.map(p => p.reposts)
+      )
+    };
+  };
+
+  const changes = getChangePercentages();
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -216,6 +251,7 @@ export default function Home() {
                 value={totalLikes + totalReposts + totalReplies}
                 chartData={dailyEngagementData}
                 color="purple"
+                change={changes.engagement}
               />
               <SummaryCard
                 icon="❤️"
@@ -223,6 +259,7 @@ export default function Home() {
                 value={avgLikes}
                 chartData={dailyLikesData}
                 color="red"
+                change={changes.likes}
               />
               <SummaryCard
                 icon="🔁"
@@ -230,6 +267,7 @@ export default function Home() {
                 value={avgReposts}
                 chartData={dailyRepostsData}
                 color="blue"
+                change={changes.reposts}
               />
             </div>
 

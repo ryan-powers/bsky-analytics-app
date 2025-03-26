@@ -3,21 +3,33 @@
 
 import { MiniTrendChart } from './MiniTrendChart';
 
-type SummaryCardProps = {
-    icon: string;
-    label: string;
-    value: number | string;
-    chartData?: { date: string; value: number }[];
-    color?: string;
-  };
-  
-export const SummaryCard = ({ icon, label, value, chartData, color = "blue" }: SummaryCardProps) => (
-    <div className="bg-white rounded-xl shadow p-4 w-full">
-      <div className="flex items-center gap-2 text-gray-700 mb-2">
-        <span className="text-xl">{icon}</span>
-        <span className="text-sm font-medium">{label}</span>
+interface SummaryCardProps {
+  icon: string;
+  label: string;
+  value: number | string;
+  chartData: { date: string; value: number }[];
+  color: string;
+  change?: number | null;
+}
+
+export function SummaryCard({ icon, label, value, chartData, color, change }: SummaryCardProps) {
+  return (
+    <div className="bg-white p-4 rounded-lg shadow border">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <span className="text-xl">{icon}</span>
+          <span className="font-medium">{label}</span>
+        </div>
+        {change !== null && change !== undefined && (
+          <div className={`flex items-center gap-1 text-sm ${
+            change > 0 ? 'text-green-600' : 'text-red-600'
+          }`}>
+            {change > 0 ? '↑' : '↓'}
+            {Math.abs(change).toFixed(1)}%
+          </div>
+        )}
       </div>
-      <div className="text-2xl font-bold tabular-nums text-gray-900">
+      <div className="text-2xl font-bold mb-4">
         {typeof value === 'number' ? value.toLocaleString() : value}
       </div>
   
@@ -25,5 +37,6 @@ export const SummaryCard = ({ icon, label, value, chartData, color = "blue" }: S
         <MiniTrendChart data={chartData} color={color} />
       )}
     </div>
-);
+  );
+}
   
