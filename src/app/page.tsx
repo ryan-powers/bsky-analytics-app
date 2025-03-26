@@ -467,7 +467,7 @@ export default function Home() {
       <footer className="bg-white border-t mt-8 py-4">
         <div className="max-w-4xl mx-auto px-4">
           <p className="text-gray-600 text-sm text-center">
-            This is a work-in-progress so updates to come (at some point).
+            This is a work-in-progress so updates to come (at some point). Github repo <a href="https://github.com/ryan-powers/bsky-analytics-app" className="text-blue-500 hover:underline">here</a>.
           </p>
         </div>
       </footer>
