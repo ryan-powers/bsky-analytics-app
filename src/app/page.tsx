@@ -226,7 +226,7 @@ export default function Home() {
             <input
               value={handle}
               onChange={(e) => setHandle(e.target.value)}
-              placeholder="Enter any Bluesky handle to view engagement metrics, e.g. 'mcuban'"
+              placeholder="Enter a handle, e.g. 'mcuban'"
               className="flex-grow border p-2 rounded"
             />
             <button
@@ -241,7 +241,7 @@ export default function Home() {
           {/* Suggested accounts - only visible when no profile is loaded */}
           {!profile && (
             <div className="mb-8 flex flex-col items-center">
-              <p className="text-sm text-gray-600 mb-3">Or try one of these accounts...</p>
+              <p className="text-sm text-gray-600 mb-3">Or try one of these...</p>
               <div className="flex gap-6">
                 {suggestedAccounts.map((account) => (
                   <button
