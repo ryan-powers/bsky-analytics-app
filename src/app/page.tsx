@@ -33,8 +33,23 @@ const calculateChange = (current: number[], previous: number[]) => {
 };
 
 export default function Home() {
-
-
+  const suggestedAccounts = [
+    {
+      handle: 'mcuban',
+      name: 'Mark Cuban',
+      avatar: '/mcuban.jpg'
+    },
+    {
+      handle: 'aoc',
+      name: 'Alexandria Ocasio-Cortez',
+      avatar: '/aoc.jpg'
+    },
+    {
+      handle: 'karaswisher',
+      name: 'Kara Swisher',
+      avatar: '/kara.jpg'
+    }
+  ];
 
   const [handle, setHandle] = useState('');
   const [posts, setPosts] = useState<Post[]>([]);
@@ -80,14 +95,14 @@ export default function Home() {
     return handle;
   };
 
-  const fetchAnalytics = async () => {
+  const fetchAnalytics = async (customHandle?: string) => {
     setLoading(true);
     setError('');
   
     try {
-      const rawInput = handle.trim();
+      const rawInput = customHandle || handle.trim();
       const normalizedHandle = normalizeHandle(rawInput);
-      setHandle(normalizedHandle);
+      setHandle(rawInput);  // Set the raw handle in the input
   
       const res = await fetch(`/api/analyze?handle=${encodeURIComponent(normalizedHandle)}`);
       const json = await res.json();
@@ -200,7 +215,7 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex-grow">
         <div className="max-w-4xl mx-auto p-4">
-          {/* Input section */}
+          {/* Input section with form */}
           <form 
             onSubmit={(e) => {
               e.preventDefault();
@@ -222,6 +237,31 @@ export default function Home() {
               {loading ? "Loading..." : "View Analytics"}
             </button>
           </form>
+
+          {/* Suggested accounts - only visible when no profile is loaded */}
+          {!profile && (
+            <div className="mb-8 flex justify-center items-center gap-4">
+              <p className="text-sm text-gray-600">Try One:</p>
+              <div className="flex gap-4">
+                {suggestedAccounts.map((account) => (
+                  <button
+                    key={account.handle}
+                    onClick={() => fetchAnalytics(account.handle)}
+                    className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 transition-colors group"
+                  >
+                    <img
+                      src={account.avatar}
+                      alt={account.name}
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <span className="font-medium group-hover:underline">
+                      {account.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Error message */}
           {error && <p className="text-gray-900 font-semibold">{error}</p>}
