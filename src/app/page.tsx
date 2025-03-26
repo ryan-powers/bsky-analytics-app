@@ -47,6 +47,7 @@ export default function Home() {
     handle: string;
     avatar: string;
     description?: string;
+    followersCount: number;
   } | null>(null);
 
   //Toggle Visibility of chart elements
@@ -113,6 +114,7 @@ export default function Home() {
         return;
       }
   
+      console.log('Profile data:', json.profile);
       setPosts(json.posts);
       setProfile(json.profile);
     } catch (err) {
@@ -235,7 +237,12 @@ export default function Home() {
               )}
               <div>
                 <h2 className="text-xl font-bold">{profile.name}</h2>
-                <p className="text-gray-500">@{profile.handle}</p>
+                <p className="text-gray-500">
+                  @{profile.handle}
+                  {profile.followersCount !== undefined && (
+                    <> · {profile.followersCount.toLocaleString()} followers</>
+                  )}
+                </p>
                 {profile.description && (
                   <p className="mt-1 text-gray-700 whitespace-pre-line">
                     {profile.description}

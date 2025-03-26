@@ -54,6 +54,7 @@ export async function fetchUserData(handle: string) {
         handle: profile.data.handle,
         avatar: profile.data.avatar,
         description: profile.data.description,
+        followersCount: profile.data.followersCount,
       },
       posts: postData,
     };
