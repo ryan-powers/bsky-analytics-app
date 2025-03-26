@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# bskyStats
+
+A web analytics dashboard for Bluesky social that provides detailed engagement metrics and visualizations for any public account.
+
+![bskyStats Logo](/public/logo_square.png)
+
+## Features
+
+- **Engagement Analytics**: Track likes, reposts, and replies across posts
+- **Interactive Timeline**: Filter data by 30, 60, 90, 180, or 365 days
+- **Visual Insights**: 
+  - Mini trend charts for quick metrics overview
+  - Detailed timeline graph with toggleable metrics
+  - Period-over-period percentage changes
+- **Top Content**: View your most successful posts by engagement
+- **Profile Overview**: Quick access to account information and statistics
+- **Auto-Complete Handles**: Just enter a username - we'll add the .bsky.social
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+
+- Bluesky account for API access
+
+### Environment Setup
+
+Create a `.env.local` file in the root directory:
+```env
+BSKY_HANDLE=your.handle.bsky.social
+BSKY_APP_PASSWORD=your-app-password
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/bskystats.git
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Install dependencies
+npm install
 
-## Learn More
+# Start development server
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Visit `http://localhost:3000` to view the application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS
+- **Charts**: Recharts
+- **API**: Bluesky Social (@atproto/api)
+- **Fonts**: Geist Sans & Mono
+- **Deployment**: Vercel
 
-## Deploy on Vercel
+## Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+MIT License - feel free to use this project however you'd like.
+
+## Acknowledgments
+
+- Built on [Next.js](https://nextjs.org/)
+- Powered by [Bluesky Social API](https://github.com/bluesky-social/atproto)
+- Deployed via [Vercel](https://vercel.com)
