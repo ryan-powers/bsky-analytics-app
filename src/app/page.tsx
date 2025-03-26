@@ -240,21 +240,21 @@ export default function Home() {
 
           {/* Suggested accounts - only visible when no profile is loaded */}
           {!profile && (
-            <div className="mb-8 flex justify-center items-center gap-4">
-              <p className="text-sm text-gray-600">Try One:</p>
-              <div className="flex gap-4">
+            <div className="mb-8 flex flex-col items-center">
+              <p className="text-sm text-gray-600 mb-3">Or try one of these accounts...</p>
+              <div className="flex gap-6">
                 {suggestedAccounts.map((account) => (
                   <button
                     key={account.handle}
                     onClick={() => fetchAnalytics(account.handle)}
-                    className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 transition-colors group"
+                    className="flex flex-col items-center gap-2 p-2 rounded hover:bg-gray-50 transition-colors group"
                   >
                     <img
                       src={account.avatar}
                       alt={account.name}
-                      className="w-8 h-8 rounded-full"
+                      className="w-12 h-12 rounded-full"
                     />
-                    <span className="font-medium group-hover:underline">
+                    <span className="font-medium text-sm group-hover:underline">
                       {account.name}
                     </span>
                   </button>
