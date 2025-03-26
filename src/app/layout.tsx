@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'bskyStats',
-    description: 'Analyze engagement metrics for Bluesky posts',
+    description: 'Analyze engagement metrics for Bluesky accounts',
     images: ['/logo_square.png']
   }
 };
