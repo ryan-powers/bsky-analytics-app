@@ -435,7 +435,6 @@ export default function Home() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <PostCard {...getTop("likes")} label="Most Liked" />
                   <PostCard {...getTop("reposts")} label="Most Reposted" />
-                  <PostCard {...getTop("replies")} label="Most Replied" />
                 </div>
               </div>
             )}
