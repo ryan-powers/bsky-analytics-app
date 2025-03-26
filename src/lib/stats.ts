@@ -1,5 +1,6 @@
 import type { Post } from '../types';
 import type { EngagementBucket } from '../types';
+import { GroupedPostData } from '../types';
 
 export function groupPostsByDay(posts: Post[], daysBack: number): EngagementBucket[] {
     const now = new Date();
@@ -36,4 +37,15 @@ export function groupPostsByDay(posts: Post[], daysBack: number): EngagementBuck
   
     return Object.values(buckets).sort((a, b) => a.date.localeCompare(b.date));
   }
+
+  // lib/stats.ts
+
+export const getDailyEngagementData = (buckets: EngagementBucket[]) => 
+    buckets.map(b => ({ date: b.date, value: b.total }));
+  
+export const getDailyLikesData = (buckets: EngagementBucket[]) => 
+    buckets.map(b => ({ date: b.date, value: b.likes }));
+  
+export const getDailyRepostsData = (buckets: EngagementBucket[]) => 
+    buckets.map(b => ({ date: b.date, value: b.reposts }));
   

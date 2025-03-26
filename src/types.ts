@@ -19,3 +19,10 @@ export type Post = {
     total: number;
   };
   
+  export type GroupedPostData = {
+    [date: string]: {
+      likes: number;
+      reposts: number;
+      replies: number;
+    };
+  };

@@ -4,6 +4,15 @@ import { useState } from 'react';
 import PostCard from '../components/PostCard';
 import type { Post } from '../types';
 import { groupPostsByDay } from '../lib/stats';
+import StatRow from '../components/StatRow';
+import { GroupedPostData } from '../types';
+
+import {
+  getDailyEngagementData,
+  getDailyLikesData,
+  getDailyRepostsData,
+} from '@/lib/stats';
+import { SummaryCard } from '../components/SummaryCard';
 
 import {
   LineChart,
@@ -17,6 +26,9 @@ import {
 
 
 export default function Home() {
+
+
+
   const [handle, setHandle] = useState('');
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
@@ -44,6 +56,11 @@ export default function Home() {
     { label: 'Last 365 days', value: 365 },
     { label: 'All Time', value: 0 },
   ];
+
+  const groupedData = groupPostsByDay(posts, daysBack);
+  const dailyLikesData = getDailyLikesData(groupedData);
+  const dailyRepostsData = getDailyRepostsData(groupedData);
+  const dailyEngagementData = getDailyEngagementData(groupedData);
 
   const normalizeHandle = (input: string): string => {
     let handle = input.trim().replace(/^@/, '').toLowerCase();
@@ -83,20 +100,31 @@ export default function Home() {
     }
   };
 
-  const getTop = (key: keyof Post) =>
-    posts.reduce((top, post) => (post[key] > top[key] ? post : top), posts[0]);
+  // Filter posts based on selected timeframe
+  const filteredPosts = posts.filter(post => {
+    if (daysBack === 0) return true; // "All Time"
+    const postDate = new Date(post.createdAt);
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysBack);
+    return postDate >= cutoffDate;
+  });
 
-  const totalLikes = posts.reduce((sum, p) => sum + p.likes, 0);
-  const totalReposts = posts.reduce((sum, p) => sum + p.reposts, 0);
-  const totalReplies = posts.reduce((sum, p) => sum + p.replies, 0);
+  // Update stats calculations to use filteredPosts
+  const totalLikes = filteredPosts.reduce((sum, p) => sum + p.likes, 0);
+  const totalReposts = filteredPosts.reduce((sum, p) => sum + p.reposts, 0);
+  const totalReplies = filteredPosts.reduce((sum, p) => sum + p.replies, 0);
 
-  const avgEngagement = posts.length > 0
-    ? ((totalLikes + totalReposts + totalReplies) / posts.length).toFixed(1)
+  const avgEngagement = filteredPosts.length > 0
+    ? ((totalLikes + totalReposts + totalReplies) / filteredPosts.length).toFixed(1)
     : '0';
 
-  const avgLikes = posts.length > 0 ? (totalLikes / posts.length).toFixed(1) : '0';
-  const avgReposts = posts.length > 0 ? (totalReposts / posts.length).toFixed(1) : '0';
-  const avgReplies = posts.length > 0 ? (totalReplies / posts.length).toFixed(1) : '0';
+  const avgLikes = filteredPosts.length > 0 ? (totalLikes / filteredPosts.length).toFixed(1) : '0';
+  const avgReposts = filteredPosts.length > 0 ? (totalReposts / filteredPosts.length).toFixed(1) : '0';
+  const avgReplies = filteredPosts.length > 0 ? (totalReplies / filteredPosts.length).toFixed(1) : '0';
+
+  // Update getTop to use filteredPosts
+  const getTop = (key: keyof Post) =>
+    filteredPosts.reduce((top, post) => (post[key] > top[key] ? post : top), filteredPosts[0]);
 
   //Check if data is loaded
   const dataLoaded = profile && posts.length > 0;
@@ -106,16 +134,21 @@ export default function Home() {
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow p-4">
-        <h1 className="text-2xl font-bold text-center">
-          🦋 Bluesky Post Analytics
-        </h1>
+        <div className="flex justify-center">
+          <img 
+            src="/logo_transparent.png" 
+            alt="Bluesky Post Analytics" 
+            className="h-15"
+          />
+        </div>
       </header>
 
       {/* Content */}
       <div className="max-w-4xl mx-auto p-4">
         {/* Input section */}
         <p className="text-gray-600 mb-2">
-          Enter any Bluesky handle. Username only is fine, the site will auto-complete the rest.
+          Enter any Bluesky handle to view engagement metrics. Username only is fine, the site will
+          auto-complete the handle.
         </p>
         <div className="flex gap-2 items-center mb-6">
           <input
@@ -136,7 +169,6 @@ export default function Home() {
         {/* Error message */}
         {error && <p className="text-red-600">{error}</p>}
 
-            
         {profile && (
           <div className="flex items-start gap-4 mb-6">
             {profile.avatar && (
@@ -160,61 +192,8 @@ export default function Home() {
 
         {/* Post Stats Summary */}
         {posts.length > 0 && (
-          <div className="mb-6 bg-white p-6 rounded shadow-sm border">
-            <h2 className="text-lg font-bold mb-4">📊 Post Stats</h2>
-
-            <div className="grid md:grid-cols-2 gap-4 text-sm text-gray-800">
-              {/* Totals */}
-              <div>
-                <h3 className="font-semibold text-gray-700 mb-2">
-                  Total Engagement
-                </h3>
-                <ul className="space-y-1">
-                  <li>
-                    📦 Posts analyzed: <strong>{posts.length}</strong>
-                  </li>
-                  <li>
-                    ❤️ Total likes:{" "}
-                    <strong>{totalLikes.toLocaleString()}</strong>
-                  </li>
-                  <li>
-                    🔁 Total reposts:{" "}
-                    <strong>{totalReposts.toLocaleString()}</strong>
-                  </li>
-                  <li>
-                    💬 Total replies:{" "}
-                    <strong>{totalReplies.toLocaleString()}</strong>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Averages */}
-              <div>
-                <h3 className="font-semibold text-gray-700 mb-2">
-                  Average Per Post
-                </h3>
-                <ul className="space-y-1">
-                  <li>
-                    ⭐ All Engagement: <strong>{avgEngagement}</strong>
-                  </li>
-                  <li>
-                    ❤️ Likes: <strong>{avgLikes}</strong>
-                  </li>
-                  <li>
-                    🔁 Reposts: <strong>{avgReposts}</strong>
-                  </li>
-                  <li>
-                    💬 Replies: <strong>{avgReplies}</strong>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/*Timeframe Selector goes here */}
-        {dataLoaded && (
-          <div className="space-y-4">
+          <div>
+            {/* Timeframe Selector */}
             <div className="mb-4 flex flex-wrap gap-2">
               {timeOptions.map(({ label, value }) => (
                 <button
@@ -229,6 +208,92 @@ export default function Home() {
               ))}
             </div>
 
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
+              <SummaryCard
+                icon="⭐"
+                label="Total Engagement"
+                value={totalLikes + totalReposts + totalReplies}
+                chartData={dailyEngagementData}
+                color="purple"
+              />
+              <SummaryCard
+                icon="❤️"
+                label="Avg Likes / Post"
+                value={avgLikes}
+                chartData={dailyLikesData}
+                color="red"
+              />
+              <SummaryCard
+                icon="🔁"
+                label="Avg Reposts / Post"
+                value={avgReposts}
+                chartData={dailyRepostsData}
+                color="blue"
+              />
+            </div>
+
+            {/* Stats Block */}
+            <div className="mb-6 bg-white p-6 rounded-lg shadow border text-gray-800">
+              <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
+                📊 Post Stats
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-10">
+                {/* Total Engagement */}
+                <div>
+                  <h3 className="text-md font-semibold text-gray-600 mb-2">
+                    Total Engagement
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <StatRow
+                      icon="📦"
+                      label="Post Count"
+                      value={posts.length}
+                    />
+                    <StatRow
+                      icon="❤️"
+                      label="Likes"
+                      value={totalLikes.toLocaleString()}
+                    />
+                    <StatRow
+                      icon="🔁"
+                      label="Reposts"
+                      value={totalReposts.toLocaleString()}
+                    />
+                    <StatRow
+                      icon="💬"
+                      label="Replies"
+                      value={totalReplies.toLocaleString()}
+                    />
+                  </div>
+                </div>
+
+                {/* Average Per Post */}
+                <div>
+                  <h3 className="text-md font-semibold text-gray-600 mb-2">
+                    Average Per Post
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    <StatRow
+                      icon="⭐"
+                      label="All Types"
+                      value={avgEngagement}
+                    />
+                    <StatRow icon="❤️" label="Likes" value={avgLikes} />
+                    <StatRow icon="🔁" label="Reposts" value={avgReposts} />
+                    <StatRow icon="💬" label="Replies" value={avgReplies} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Chart Section */}
+        {dataLoaded && (
+          <div className="space-y-4">
+            {/* Chart Controls */}
             <div className="mb-4 flex flex-wrap gap-2 text-sm">
               <label className="flex items-center gap-1">
                 <input
@@ -325,7 +390,7 @@ export default function Home() {
               </LineChart>
             </ResponsiveContainer>
 
-            {/* Top posts */}
+            {/* Top Posts Section */}
             {posts.length > 0 && (
               <div className="space-y-6">
                 <h2 className="text-xl font-semibold">Top Posts</h2>
