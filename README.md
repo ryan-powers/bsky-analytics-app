@@ -2,7 +2,7 @@
 
 A web analytics dashboard for Bluesky social that provides detailed engagement metrics and visualizations for any public account.
 
-![bskyStats Logo](/public/logo_square.png)
+![bskyStats Logo](/public/logo.png)
 
 ## Features
 
