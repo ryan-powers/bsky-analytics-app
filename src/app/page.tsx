@@ -92,12 +92,21 @@ export default function Home() {
       const json = await res.json();
   
       if (!res.ok) {
-        if (res.status === 400) {
+        // For invalid handles and not found users
+        if (res.status === 400 && json.error?.includes('not found')) {
           setError("Couldn't find that user. Please try again.");
-        } else if (res.status === 429 || res.status >= 500) {
-          setError("Bluesky seems busy, please try again later.");
-        } else {
-          setError(json.error || 'Something went wrong.');
+        }
+        // For malformed handles
+        else if (res.status === 400 && json.error?.includes('invalid handle')) {
+          setError("That doesn't look like a valid handle. Please try again.");
+        }
+        // For other 400 errors
+        else if (res.status === 400) {
+          setError("Something's wrong with that handle. Please try again.");
+        }
+        // For all other errors
+        else {
+          setError('Something went wrong. Please try again.');
         }
         setPosts([]);
         setProfile(null);
@@ -210,7 +219,7 @@ export default function Home() {
         </div>
 
         {/* Error message */}
-        {error && <p className="text-red-600">{error}</p>}
+        {error && <p className="text-gray-900 font-semibold">{error}</p>}
 
         {profile && (
           <div className="flex items-start gap-4 mb-6">
