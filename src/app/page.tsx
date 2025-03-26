@@ -183,7 +183,7 @@ export default function Home() {
   const changes = getChangePercentages();
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
       <header className="bg-white shadow p-4">
         <div className="flex justify-center">
@@ -195,275 +195,282 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto p-4">
-        {/* Input section */}
-        <p className="text-gray-600 mb-2">
-          Enter any Bluesky handle to view engagement metrics. Username only is fine, the site will
-          auto-complete the handle.
-        </p>
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            fetchAnalytics();
-          }}
-          className="flex gap-2 items-center mb-6"
-        >
-          <input
-            value={handle}
-            onChange={(e) => setHandle(e.target.value)}
-            placeholder="e.g. 'mcuban'"
-            className="flex-grow border p-2 rounded"
-          />
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            disabled={loading}
+      {/* Main Content */}
+      <div className="flex-grow">
+        <div className="max-w-4xl mx-auto p-4">
+          {/* Input section */}
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              fetchAnalytics();
+            }}
+            className="flex gap-2 items-center mb-6"
           >
-            {loading ? "Loading..." : "Get Analytics"}
-          </button>
-        </form>
+            <input
+              value={handle}
+              onChange={(e) => setHandle(e.target.value)}
+              placeholder="Enter any Bluesky handle to view engagement metrics, e.g. 'mcuban'"
+              className="flex-grow border p-2 rounded"
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+              disabled={loading}
+            >
+              {loading ? "Loading..." : "View Analytics"}
+            </button>
+          </form>
 
-        {/* Error message */}
-        {error && <p className="text-gray-900 font-semibold">{error}</p>}
+          {/* Error message */}
+          {error && <p className="text-gray-900 font-semibold">{error}</p>}
 
-        {profile && (
-          <div className="flex items-start gap-4 mb-6">
-            {profile.avatar && (
-              <img
-                src={profile.avatar}
-                alt={profile.name}
-                className="w-16 h-16 rounded-full"
-              />
-            )}
+          {profile && (
+            <div className="flex items-start gap-4 mb-6">
+              {profile.avatar && (
+                <img
+                  src={profile.avatar}
+                  alt={profile.name}
+                  className="w-16 h-16 rounded-full"
+                />
+              )}
+              <div>
+                <h2 className="text-xl font-bold">{profile.name}</h2>
+                <p className="text-gray-500">@{profile.handle}</p>
+                {profile.description && (
+                  <p className="mt-1 text-gray-700 whitespace-pre-line">
+                    {profile.description}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Post Stats Summary */}
+          {posts.length > 0 && (
             <div>
-              <h2 className="text-xl font-bold">{profile.name}</h2>
-              <p className="text-gray-500">@{profile.handle}</p>
-              {profile.description && (
-                <p className="mt-1 text-gray-700 whitespace-pre-line">
-                  {profile.description}
-                </p>
+              {/* Timeframe Selector */}
+              <div className="mb-4 flex flex-wrap gap-2">
+                {timeOptions.map(({ label, value }) => (
+                  <button
+                    key={value}
+                    onClick={() => setDaysBack(value)}
+                    className={`px-3 py-1 rounded border ${
+                      daysBack === value ? "bg-blue-500 text-white" : "bg-white"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
+                <SummaryCard
+                  icon="⭐"
+                  label="Total Engagement"
+                  value={totalLikes + totalReposts + totalReplies}
+                  chartData={dailyEngagementData}
+                  color="purple"
+                  change={changes.engagement}
+                />
+                <SummaryCard
+                  icon="❤️"
+                  label="Avg Likes / Post"
+                  value={avgLikes}
+                  chartData={dailyLikesData}
+                  color="red"
+                  change={changes.likes}
+                />
+                <SummaryCard
+                  icon="🔁"
+                  label="Avg Reposts / Post"
+                  value={avgReposts}
+                  chartData={dailyRepostsData}
+                  color="blue"
+                  change={changes.reposts}
+                />
+              </div>
+
+              {/* Stats Block */}
+              <div className="mb-6 bg-white p-6 rounded-lg shadow border text-gray-800">
+                <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
+                  📊 Post Stats
+                </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-10">
+                  {/* Total Engagement */}
+                  <div>
+                    <h3 className="text-md font-semibold text-gray-600 mb-2">
+                      Total Engagement
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <StatRow
+                        icon="📦"
+                        label="Post Count"
+                        value={posts.length}
+                      />
+                      <StatRow
+                        icon="❤️"
+                        label="Likes"
+                        value={totalLikes.toLocaleString()}
+                      />
+                      <StatRow
+                        icon="🔁"
+                        label="Reposts"
+                        value={totalReposts.toLocaleString()}
+                      />
+                      <StatRow
+                        icon="💬"
+                        label="Replies"
+                        value={totalReplies.toLocaleString()}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Average Per Post */}
+                  <div>
+                    <h3 className="text-md font-semibold text-gray-600 mb-2">
+                      Average Per Post
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      <StatRow
+                        icon="⭐"
+                        label="All Types"
+                        value={avgEngagement}
+                      />
+                      <StatRow icon="❤️" label="Likes" value={avgLikes} />
+                      <StatRow icon="🔁" label="Reposts" value={avgReposts} />
+                      <StatRow icon="💬" label="Replies" value={avgReplies} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Chart Section */}
+          {dataLoaded && (
+            <div className="space-y-4">
+              {/* Chart Controls */}
+              <div className="mb-4 flex flex-wrap gap-2 text-sm">
+                <label className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={showTotal}
+                    onChange={() => setShowTotal(!showTotal)}
+                  />
+                  ⭐ Total
+                </label>
+                <label className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={showLikes}
+                    onChange={() => setShowLikes(!showLikes)}
+                  />
+                  ❤️ Likes
+                </label>
+                <label className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={showReposts}
+                    onChange={() => setShowReposts(!showReposts)}
+                  />
+                  🔁 Reposts
+                </label>
+                <label className="flex items-center gap-1">
+                  <input
+                    type="checkbox"
+                    checked={showReplies}
+                    onChange={() => setShowReplies(!showReplies)}
+                  />
+                  💬 Replies
+                </label>
+              </div>
+
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={chartData}>
+                  <XAxis
+                    dataKey="date"
+                    tickFormatter={(dateStr) => {
+                      const date = new Date(dateStr);
+                      return date.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      });
+                    }}
+                  />
+                  <YAxis
+                    tickFormatter={(value) => {
+                      if (value >= 1_000_000)
+                        return `${(value / 1_000_000).toFixed(1)}M`;
+                      if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
+                      return value;
+                    }}
+                  />
+                  <Tooltip />
+                  <Legend />
+                  {showTotal && (
+                    <Line
+                      type="monotone"
+                      dataKey="total"
+                      stroke="#6366f1"
+                      name="Total"
+                      strokeWidth={2}
+                    />
+                  )}
+                  {showLikes && (
+                    <Line
+                      type="monotone"
+                      dataKey="likes"
+                      stroke="#ef4444"
+                      name="Likes"
+                      strokeWidth={2}
+                    />
+                  )}
+                  {showReposts && (
+                    <Line
+                      type="monotone"
+                      dataKey="reposts"
+                      stroke="#3b82f6"
+                      name="Reposts"
+                      strokeWidth={2}
+                    />
+                  )}
+                  {showReplies && (
+                    <Line
+                      type="monotone"
+                      dataKey="replies"
+                      stroke="#10b981"
+                      name="Replies"
+                      strokeWidth={2}
+                    />
+                  )}
+                </LineChart>
+              </ResponsiveContainer>
+
+              {/* Top Posts Section */}
+              {posts.length > 0 && (
+                <div className="space-y-6">
+                  <h2 className="text-xl font-semibold">Top Posts</h2>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <PostCard {...getTop("likes")} label="Most Liked" />
+                    <PostCard {...getTop("reposts")} label="Most Reposted" />
+                  </div>
+                </div>
               )}
             </div>
-          </div>
-        )}
-
-        {/* Post Stats Summary */}
-        {posts.length > 0 && (
-          <div>
-            {/* Timeframe Selector */}
-            <div className="mb-4 flex flex-wrap gap-2">
-              {timeOptions.map(({ label, value }) => (
-                <button
-                  key={value}
-                  onClick={() => setDaysBack(value)}
-                  className={`px-3 py-1 rounded border ${
-                    daysBack === value ? "bg-blue-500 text-white" : "bg-white"
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-
-            {/* Summary Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
-              <SummaryCard
-                icon="⭐"
-                label="Total Engagement"
-                value={totalLikes + totalReposts + totalReplies}
-                chartData={dailyEngagementData}
-                color="purple"
-                change={changes.engagement}
-              />
-              <SummaryCard
-                icon="❤️"
-                label="Avg Likes / Post"
-                value={avgLikes}
-                chartData={dailyLikesData}
-                color="red"
-                change={changes.likes}
-              />
-              <SummaryCard
-                icon="🔁"
-                label="Avg Reposts / Post"
-                value={avgReposts}
-                chartData={dailyRepostsData}
-                color="blue"
-                change={changes.reposts}
-              />
-            </div>
-
-            {/* Stats Block */}
-            <div className="mb-6 bg-white p-6 rounded-lg shadow border text-gray-800">
-              <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
-                📊 Post Stats
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-10">
-                {/* Total Engagement */}
-                <div>
-                  <h3 className="text-md font-semibold text-gray-600 mb-2">
-                    Total Engagement
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <StatRow
-                      icon="📦"
-                      label="Post Count"
-                      value={posts.length}
-                    />
-                    <StatRow
-                      icon="❤️"
-                      label="Likes"
-                      value={totalLikes.toLocaleString()}
-                    />
-                    <StatRow
-                      icon="🔁"
-                      label="Reposts"
-                      value={totalReposts.toLocaleString()}
-                    />
-                    <StatRow
-                      icon="💬"
-                      label="Replies"
-                      value={totalReplies.toLocaleString()}
-                    />
-                  </div>
-                </div>
-
-                {/* Average Per Post */}
-                <div>
-                  <h3 className="text-md font-semibold text-gray-600 mb-2">
-                    Average Per Post
-                  </h3>
-                  <div className="space-y-2 text-sm">
-                    <StatRow
-                      icon="⭐"
-                      label="All Types"
-                      value={avgEngagement}
-                    />
-                    <StatRow icon="❤️" label="Likes" value={avgLikes} />
-                    <StatRow icon="🔁" label="Reposts" value={avgReposts} />
-                    <StatRow icon="💬" label="Replies" value={avgReplies} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Chart Section */}
-        {dataLoaded && (
-          <div className="space-y-4">
-            {/* Chart Controls */}
-            <div className="mb-4 flex flex-wrap gap-2 text-sm">
-              <label className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={showTotal}
-                  onChange={() => setShowTotal(!showTotal)}
-                />
-                ⭐ Total
-              </label>
-              <label className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={showLikes}
-                  onChange={() => setShowLikes(!showLikes)}
-                />
-                ❤️ Likes
-              </label>
-              <label className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={showReposts}
-                  onChange={() => setShowReposts(!showReposts)}
-                />
-                🔁 Reposts
-              </label>
-              <label className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  checked={showReplies}
-                  onChange={() => setShowReplies(!showReplies)}
-                />
-                💬 Replies
-              </label>
-            </div>
-
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={chartData}>
-                <XAxis
-                  dataKey="date"
-                  tickFormatter={(dateStr) => {
-                    const date = new Date(dateStr);
-                    return date.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    });
-                  }}
-                />
-                <YAxis
-                  tickFormatter={(value) => {
-                    if (value >= 1_000_000)
-                      return `${(value / 1_000_000).toFixed(1)}M`;
-                    if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
-                    return value;
-                  }}
-                />
-                <Tooltip />
-                <Legend />
-                {showTotal && (
-                  <Line
-                    type="monotone"
-                    dataKey="total"
-                    stroke="#6366f1"
-                    name="Total"
-                    strokeWidth={2}
-                  />
-                )}
-                {showLikes && (
-                  <Line
-                    type="monotone"
-                    dataKey="likes"
-                    stroke="#ef4444"
-                    name="Likes"
-                    strokeWidth={2}
-                  />
-                )}
-                {showReposts && (
-                  <Line
-                    type="monotone"
-                    dataKey="reposts"
-                    stroke="#3b82f6"
-                    name="Reposts"
-                    strokeWidth={2}
-                  />
-                )}
-                {showReplies && (
-                  <Line
-                    type="monotone"
-                    dataKey="replies"
-                    stroke="#10b981"
-                    name="Replies"
-                    strokeWidth={2}
-                  />
-                )}
-              </LineChart>
-            </ResponsiveContainer>
-
-            {/* Top Posts Section */}
-            {posts.length > 0 && (
-              <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Top Posts</h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <PostCard {...getTop("likes")} label="Most Liked" />
-                  <PostCard {...getTop("reposts")} label="Most Reposted" />
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t mt-8 py-4">
+        <div className="max-w-4xl mx-auto px-4">
+          <p className="text-gray-600 text-sm text-center">
+            This is a work-in-progress so updates to come (at some point).
+          </p>
+        </div>
+      </footer>
     </main>
   );
 }
