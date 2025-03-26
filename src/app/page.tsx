@@ -86,22 +86,30 @@ export default function Home() {
     try {
       const rawInput = handle.trim();
       const normalizedHandle = normalizeHandle(rawInput);
-      setHandle(normalizedHandle); // optional: reflect it in the input box
+      setHandle(normalizedHandle);
   
       const res = await fetch(`/api/analyze?handle=${encodeURIComponent(normalizedHandle)}`);
       const json = await res.json();
   
-      if (json.error) {
-        setError(json.error);
+      if (!res.ok) {
+        if (res.status === 400) {
+          setError("Couldn't find that user. Please try again.");
+        } else if (res.status === 429 || res.status >= 500) {
+          setError("Bluesky seems busy, please try again later.");
+        } else {
+          setError(json.error || 'Something went wrong.');
+        }
         setPosts([]);
         setProfile(null);
-      } else {
-        setPosts(json.posts);
-        setProfile(json.profile);
+        return;
       }
-    } catch {
+  
+      setPosts(json.posts);
+      setProfile(json.profile);
+    } catch (err) {
       setError('Something went wrong.');
       setPosts([]);
+      setProfile(null);
     } finally {
       setLoading(false);
     }
