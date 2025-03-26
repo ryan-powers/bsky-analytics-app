@@ -174,25 +174,41 @@ export default function Home() {
     if (daysBack === 0) return { engagement: null, likes: null, reposts: null };
 
     const now = new Date();
-    const cutoff = new Date();
-    cutoff.setDate(now.getDate() - daysBack);
-    const midpoint = new Date(cutoff.getTime() + (now.getTime() - cutoff.getTime()) / 2);
+    const currentPeriodEnd = now;
+    const currentPeriodStart = new Date(now);
+    currentPeriodStart.setDate(now.getDate() - daysBack);
+    
+    const previousPeriodEnd = new Date(currentPeriodStart);
+    const previousPeriodStart = new Date(previousPeriodEnd);
+    previousPeriodStart.setDate(previousPeriodEnd.getDate() - daysBack);
 
-    const recentPosts = filteredPosts.filter(p => new Date(p.createdAt) >= midpoint);
-    const olderPosts = filteredPosts.filter(p => new Date(p.createdAt) < midpoint && new Date(p.createdAt) >= cutoff);
+    const currentPosts = filteredPosts.filter(p => {
+      const date = new Date(p.createdAt);
+      return date >= currentPeriodStart && date <= currentPeriodEnd;
+    });
+
+    const previousPosts = posts.filter(p => {
+      const date = new Date(p.createdAt);
+      return date >= previousPeriodStart && date < currentPeriodStart;
+    });
+
+    const calculateAverage = (posts: Post[], metric: keyof Pick<Post, 'likes' | 'reposts' | 'replies'>) => {
+      if (posts.length === 0) return 0;
+      return posts.reduce((sum, post) => sum + post[metric], 0) / posts.length;
+    };
+
+    const currentEngagement = currentPosts.map(p => p.likes + p.reposts + p.replies);
+    const previousEngagement = previousPosts.map(p => p.likes + p.reposts + p.replies);
 
     return {
-      engagement: calculateChange(
-        recentPosts.map(p => p.likes + p.reposts + p.replies),
-        olderPosts.map(p => p.likes + p.reposts + p.replies)
-      ),
+      engagement: calculateChange(currentEngagement, previousEngagement),
       likes: calculateChange(
-        recentPosts.map(p => p.likes),
-        olderPosts.map(p => p.likes)
+        currentPosts.map(p => p.likes),
+        previousPosts.map(p => p.likes)
       ),
       reposts: calculateChange(
-        recentPosts.map(p => p.reposts),
-        olderPosts.map(p => p.reposts)
+        currentPosts.map(p => p.reposts),
+        previousPosts.map(p => p.reposts)
       )
     };
   };
