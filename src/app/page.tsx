@@ -511,11 +511,23 @@ export default function Home() {
 
               {/* Top Posts Section */}
               {posts.length > 0 && (
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <h2 className="text-xl font-semibold">Top Posts</h2>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <PostCard {...getTop("likes")} label="Most Liked" />
-                    <PostCard {...getTop("reposts")} label="Most Reposted" />
+                  <div className="relative">
+                    <div className="overflow-x-auto pb-4 hide-scrollbar">
+                      <div className="flex gap-4">
+                        {filteredPosts
+                          .sort((a, b) => 
+                            (b.likes + b.reposts + b.replies) - (a.likes + a.reposts + a.replies)
+                          )
+                          .slice(0, 10)
+                          .map((post) => (
+                            <div key={post.createdAt} className="w-[400px] flex-shrink-0">
+                              <PostCard {...post} />
+                            </div>
+                          ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -528,7 +540,7 @@ export default function Home() {
       <footer className="bg-white border-t mt-8 py-4">
         <div className="max-w-4xl mx-auto px-4">
           <p className="text-gray-600 text-sm text-center">
-            This is a work-in-progress so updates to come (at some point). Github repo <a href="https://github.com/ryan-powers/bsky-analytics-app" className="text-blue-500 hover:underline">here</a>.
+            Made by <a href="https://bsky.app/profile/ryanpowers.bsky.social" className="text-blue-500 hover:underline">@ryanpowers.bsky.social</a>. Github repo <a href="https://github.com/ryan-powers/bsky-analytics-app" className="text-blue-500 hover:underline">here</a>.
           </p>
         </div>
       </footer>
