@@ -5,7 +5,6 @@ import PostCard from '../components/PostCard';
 import type { Post } from '../types';
 import { groupPostsByDay } from '../lib/stats';
 import StatRow from '../components/StatRow';
-import { GroupedPostData } from '../types';
 
 import {
   getDailyEngagementData,
@@ -409,6 +408,10 @@ export default function Home() {
           {/* Chart Section */}
           {dataLoaded && (
             <div className="space-y-4">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                📈 Daily Engagement
+              </h2>
+              
               {/* Chart Controls */}
               <div className="mb-4 flex flex-wrap gap-2 text-sm">
                 <label className="flex items-center gap-1">
