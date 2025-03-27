@@ -156,12 +156,12 @@ export default function Home() {
   const totalReplies = filteredPosts.reduce((sum, p) => sum + p.replies, 0);
 
   const avgEngagement = filteredPosts.length > 0
-    ? ((totalLikes + totalReposts + totalReplies) / filteredPosts.length).toFixed(1)
+    ? ((totalLikes + totalReposts + totalReplies) / filteredPosts.length).toLocaleString('en-US', { maximumFractionDigits: 1 })
     : '0';
 
-  const avgLikes = filteredPosts.length > 0 ? (totalLikes / filteredPosts.length).toFixed(1) : '0';
-  const avgReposts = filteredPosts.length > 0 ? (totalReposts / filteredPosts.length).toFixed(1) : '0';
-  const avgReplies = filteredPosts.length > 0 ? (totalReplies / filteredPosts.length).toFixed(1) : '0';
+  const avgLikes = filteredPosts.length > 0 ? (totalLikes / filteredPosts.length).toLocaleString('en-US', { maximumFractionDigits: 1 }) : '0';
+  const avgReposts = filteredPosts.length > 0 ? (totalReposts / filteredPosts.length).toLocaleString('en-US', { maximumFractionDigits: 1 }) : '0';
+  const avgReplies = filteredPosts.length > 0 ? (totalReplies / filteredPosts.length).toLocaleString('en-US', { maximumFractionDigits: 1 }) : '0';
 
   // Update getTop to use filteredPosts
   const getTop = (key: keyof Post) =>
@@ -191,11 +191,6 @@ export default function Home() {
       const date = new Date(p.createdAt);
       return date >= previousPeriodStart && date < currentPeriodStart;
     });
-
-    const calculateAverage = (posts: Post[], metric: keyof Pick<Post, 'likes' | 'reposts' | 'replies'>) => {
-      if (posts.length === 0) return 0;
-      return posts.reduce((sum, post) => sum + post[metric], 0) / posts.length;
-    };
 
     const currentEngagement = currentPosts.map(p => p.likes + p.reposts + p.replies);
     const previousEngagement = previousPosts.map(p => p.likes + p.reposts + p.replies);
