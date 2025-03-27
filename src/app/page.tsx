@@ -29,6 +29,7 @@ import {
   getChangePercentages,
 } from "../lib/analytics";
 import { fetchAnalytics } from "../lib/api";
+import WelcomeSection from "../components/WelcomeSection";
 
 export default function Home() {
   const [handle, setHandle] = useState("");
@@ -78,21 +79,23 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex-grow">
         <div className="max-w-4xl mx-auto p-4">
-          {/* Input section with form */}
-          <SearchBar
-            handle={handle}
-            setHandle={setHandle}
-            onSearch={handleFetchAnalytics}
-            loading={loading}
-          />
-
-          {/* Suggested accounts - only visible when no profile is loaded */}
-          {!profile && (
-            <TestAccounts
-              accounts={suggestedAccounts}
-              onSelect={handleFetchAnalytics}
+          <WelcomeSection hasProfile={!!profile}>
+            {/* Input section with form */}
+            <SearchBar
+              handle={handle}
+              setHandle={setHandle}
+              onSearch={handleFetchAnalytics}
+              loading={loading}
             />
-          )}
+
+            {/* Suggested accounts - only visible when no profile is loaded */}
+            {!profile && (
+              <TestAccounts
+                accounts={suggestedAccounts}
+                onSelect={handleFetchAnalytics}
+              />
+            )}
+          </WelcomeSection>
 
           {/* Error message */}
           {error && <p className="text-gray-900 font-semibold">{error}</p>}

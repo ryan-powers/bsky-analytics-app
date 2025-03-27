@@ -15,26 +15,54 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "bskyStats",
-  description: "Analyze engagement metrics for Bluesky accounts",
+  metadataBase: new URL('https://bskystats.me'),
+  title: {
+    default: 'bskyStats.me - Bluesky Analytics & Engagement Metrics',
+    template: '%s | bskyStats.me'
+  },
+  description: 'Free analytics tool for Bluesky accounts. Track engagement metrics, analyze likes, reposts, replies, and discover top performing content for public accounts.',
+  keywords: ['bluesky', 'analytics', 'social media', 'engagement metrics', 'post analytics', 'bsky', 'statistics'],
+  authors: [{ name: 'Ryan Powers', url: 'https://bsky.app/profile/ryanpowers.bsky.social' }],
+  creator: 'Ryan Powers',
+  publisher: 'Ryan Powers',
   icons: {
-    icon: "/browser_icon.png"
+    icon: '/browser_icon.png',
+    apple: '/logo_square.png',
   },
   openGraph: {
-    title: 'bskyStats',
-    description: 'Analyze engagement metrics for Bluesky accounts',
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://bskystats.me',
+    title: 'bskyStats.me - Bluesky Analytics & Engagement Metrics',
+    description: 'Free analytics tool for Bluesky accounts. Track engagement metrics, analyze likes, reposts, replies, and discover top performing content.',
+    siteName: 'bskyStats.me',
     images: [{
       url: '/logo_square.png',
       width: 1200,
       height: 1200,
-      alt: 'bskyStats'
+      alt: 'bskyStats.me Logo'
     }]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'bskyStats',
-    description: 'Analyze engagement metrics for Bluesky accounts',
+    title: 'bskyStats.me - Bluesky Analytics',
+    description: 'Free analytics tool for Bluesky posts and engagement metrics',
+    creator: '@ryanpowers',
     images: ['/logo_square.png']
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'google49a04e86fa383ad7',
   }
 };
 
