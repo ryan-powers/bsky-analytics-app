@@ -1,6 +1,5 @@
 import type { Post } from '../types';
 import type { EngagementBucket } from '../types';
-import { GroupedPostData } from '../types';
 
 export function groupPostsByDay(posts: Post[], daysBack: number): EngagementBucket[] {
     const now = new Date();
