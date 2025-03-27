@@ -23,8 +23,6 @@ export const metadata: Metadata = {
   description: 'Free analytics tool for Bluesky accounts. Track engagement metrics, analyze likes, reposts, replies, and discover top performing content for public accounts.',
   keywords: ['bluesky', 'analytics', 'social media', 'engagement metrics', 'post analytics', 'bsky', 'statistics'],
   authors: [{ name: 'Ryan Powers', url: 'https://bsky.app/profile/ryanpowers.bsky.social' }],
-  creator: 'Ryan Powers',
-  publisher: 'Ryan Powers',
   icons: {
     icon: '/browser_icon.png',
     apple: '/logo_square.png',
@@ -47,7 +45,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'bskyStats.me - Bluesky Analytics',
     description: 'Free analytics tool for Bluesky posts and engagement metrics',
-    creator: '@ryanpowers',
     images: ['/logo_square.png']
   },
   robots: {
