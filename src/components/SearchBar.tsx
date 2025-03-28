@@ -69,13 +69,19 @@ export default function SearchBar({
   }, [handle, loading]);
 
   const handleSelect = (selectedHandle: string) => {
-    setHandle(selectedHandle);
+    // Ensure the handle starts with @
+    const formattedHandle = selectedHandle.startsWith('@') 
+      ? selectedHandle 
+      : '@' + selectedHandle;
+    
+    setHandle(formattedHandle);
     setShowDropdown(false);
     setSuggestions([]);
     
     inputRef.current?.blur();
     
-    onSearch(selectedHandle);
+    // Pass the formatted handle to ensure @ is included
+    onSearch(formattedHandle);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -138,6 +144,16 @@ export default function SearchBar({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    if (!value.startsWith('@')) {
+      setHandle('@' + value.replace(/@/g, ''));
+    } else {
+      setHandle(value);
+    }
+  };
+
   return (
     <div className="mb-6">
       <form onSubmit={handleSubmit} className="relative flex flex-col gap-2">
@@ -145,7 +161,7 @@ export default function SearchBar({
           <input
             ref={inputRef}
             value={handle}
-            onChange={(e) => setHandle(e.target.value)}
+            onChange={handleInputChange}
             placeholder="@"
             className="flex-grow border p-2 rounded"
             onFocus={handleFocus}
