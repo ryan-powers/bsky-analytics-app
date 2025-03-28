@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Post } from "../types";
 import { groupPostsByDay } from "../lib/stats";
 import { suggestedAccounts, timeOptions } from "../lib/utils";
@@ -72,6 +72,19 @@ export default function Home() {
   //Check if data is loaded
   const dataLoaded = profile && posts.length > 0;
 
+  // Add this useEffect to clear the search bar after successful data load
+  useEffect(() => {
+    // Check if data was successfully loaded
+    if (profile && posts.length > 0 && !loading && !error) {
+      // Clear the search bar with a small delay to ensure UI updates properly
+      const timer = setTimeout(() => {
+        setHandle("");
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [profile, posts.length, loading, error]);
+
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col">
       <Header />
@@ -86,6 +99,7 @@ export default function Home() {
               setHandle={setHandle}
               onSearch={handleFetchAnalytics}
               loading={loading}
+              error={error}
             />
 
             {/* Suggested accounts - only visible when no profile is loaded */}
@@ -96,9 +110,6 @@ export default function Home() {
               />
             )}
           </WelcomeSection>
-
-          {/* Error message */}
-          {error && <p className="text-gray-900 font-semibold">{error}</p>}
 
           {/* Profile section */}
           {profile && (
