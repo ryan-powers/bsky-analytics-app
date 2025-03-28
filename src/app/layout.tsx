@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     default: 'bskyStats.me - Bluesky Analytics & Engagement Metrics',
     template: '%s | bskyStats.me'
   },
-  description: 'Free analytics tool for Bluesky accounts. Track engagement metrics, analyze likes, reposts, replies, and discover top performing content for public accounts.',
+  description: 'Free analytics tool for Bluesky accounts. Track engagement metrics, analyze likes, reposts, and replies.',
   keywords: ['bluesky', 'analytics', 'social media', 'engagement metrics', 'post analytics', 'bsky', 'statistics'],
   authors: [{ name: 'Ryan Powers', url: 'https://bsky.app/profile/ryanpowers.bsky.social' }],
   icons: {
