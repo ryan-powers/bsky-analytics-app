@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://bskystats.me',
     title: 'bskyStats.me - Bluesky Analytics & Engagement Metrics',
-    description: 'Free analytics tool for Bluesky accounts. Track engagement metrics, analyze likes, reposts, replies, and discover top performing content.',
+    description: 'Free analytics tool for Bluesky accounts. Track engagement metrics, analyze likes, reposts, and replies.',
     siteName: 'bskyStats.me',
     images: [{
       url: '/logo_square.png',
