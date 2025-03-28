@@ -175,7 +175,7 @@ export default function SearchBar({
             className="bg-blue-500 text-white px-4 py-2 rounded"
             disabled={loading}
           >
-            {loading ? "Loading..." : "View Analytics"}
+            {loading ? "Loading..." : "Search"}
           </button>
         </div>
 
