@@ -38,10 +38,10 @@ export const timeOptions = [
 // Normalize the handle to the correct format
 export const normalizeHandle = (input: string): string => {
   let handle = input.trim().replace(/^@/, "").toLowerCase();
-
+  
   if (!handle.includes(".")) {
     handle += ".bsky.social";
-  }
-
-  return handle;
+    }
+  
+    return handle;
 };
