@@ -91,12 +91,12 @@ export default function SearchBar({
             <li
               key={user.handle}
               onMouseDown={() => handleSelect(user.handle)}
-              className="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"
+              className="flex items-center gap-4 px-4 py-4 cursor-pointer hover:bg-gray-100"
             >
               <img
                 src={user.avatar}
                 alt={user.displayName}
-                className="w-6 h-6 rounded-full"
+                className="w-10 h-10 rounded-full"
               />
               <div>
                 <div className="font-medium">{user.displayName}</div>
