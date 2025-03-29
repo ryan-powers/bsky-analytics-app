@@ -159,7 +159,7 @@ export default function SearchBar({
   return (
     <div className="mb-6">
       <form onSubmit={handleSubmit} className="relative flex flex-col gap-2">
-        <div className="flex gap-2 items-center max-w-2xl mx-auto w-full">
+        <div className="flex gap-2 items-center">
           <input
             ref={inputRef}
             value={handle}
@@ -182,13 +182,13 @@ export default function SearchBar({
         </div>
 
         {showDropdown && suggestions.length > 0 && !loading && (
-          <ul className="absolute top-full mt-1 left-38 bg-white border rounded shadow z-10 max-h-60 overflow-y-auto">
+          <ul className="absolute top-full mt-1 left-0 w-80 md:w-96 bg-white border rounded shadow z-10 max-h-60 overflow-y-auto">
             {suggestions.map((user, index) => (
               <li
                 key={user.handle}
                 onMouseDown={() => handleSelect(user.handle)}
                 className={`flex items-center gap-4 px-4 py-4 cursor-pointer ${
-                  index === selectedIndex ? 'bg-blue-50' : 'hover:bg-gray-100'
+                  index === selectedIndex ? "bg-blue-50" : "hover:bg-gray-100"
                 }`}
                 onMouseEnter={() => setSelectedIndex(index)}
               >
