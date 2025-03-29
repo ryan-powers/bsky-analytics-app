@@ -182,7 +182,7 @@ export default function SearchBar({
         </div>
 
         {showDropdown && suggestions.length > 0 && !loading && (
-          <ul className="absolute top-full mt-1 left-0 w-80 md:w-96 bg-white border rounded shadow z-10 max-h-60 overflow-y-auto">
+          <ul className="absolute top-full mt-1 left-38 bg-white border rounded shadow z-10 max-h-60 overflow-y-auto">
             {suggestions.map((user, index) => (
               <li
                 key={user.handle}
