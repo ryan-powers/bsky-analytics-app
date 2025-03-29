@@ -9,17 +9,17 @@ export const calculateChange = (current: number[], previous: number[]) => {
 // Suggested accounts to follow
 export const suggestedAccounts = [
   {
-    handle: "mcuban",
+    handle: "@mcuban.bsky.social",
     name: "Mark Cuban",
     avatar: "/mcuban.jpg",
   },
   {
-    handle: "aoc",
-    name: "Alexandria Ocasio-Cortez",
-    avatar: "/aoc.jpg",
+    handle: "@jay.bsky.team",
+    name: "Jay 🦋",
+    avatar: "/jay.jpg",
   },
   {
-    handle: "karaswisher",
+    handle: "@karaswisher.bsky.social",
     name: "Kara Swisher",
     avatar: "/kara.jpg",
   },
