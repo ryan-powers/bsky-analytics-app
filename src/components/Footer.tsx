@@ -7,6 +7,8 @@ export default function Footer() {
           <a
             href="https://bsky.app/profile/ryanpowers.bsky.social"
             className="text-blue-500 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             @ryanpowers.bsky.social
           </a>
@@ -14,6 +16,8 @@ export default function Footer() {
           <a
             href="https://github.com/ryan-powers/bsky-analytics-app"
             className="text-blue-500 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             here
           </a>
