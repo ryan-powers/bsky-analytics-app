@@ -14,9 +14,9 @@ export const suggestedAccounts = [
     avatar: "/mcuban.jpg",
   },
   {
-    handle: "@jay.bsky.team",
-    name: "Jay 🦋",
-    avatar: "/jay.jpg",
+    handle: "@aoc.bsky.social",
+    name: "Alexandria Ocasio-Cortez",
+    avatar: "/aoc.jpg",
   },
   {
     handle: "@karaswisher.bsky.social",
@@ -27,11 +27,11 @@ export const suggestedAccounts = [
 
 // Time options for the chart
 export const timeOptions = [
-  { label: "Last 30 days", value: 30 },
-  { label: "Last 60 days", value: 60 },
-  { label: "Last 90 days", value: 90 },
-  { label: "Last 180 days", value: 180 },
-  { label: "Last 365 days", value: 365 },
+  { label: "30 days", value: 30 },
+  { label: "60 days", value: 60 },
+  { label: "90 days", value: 90 },
+  { label: "180 days", value: 180 },
+  { label: "1 Year", value: 365 },
   { label: "All Time", value: 0 },
 ];
 

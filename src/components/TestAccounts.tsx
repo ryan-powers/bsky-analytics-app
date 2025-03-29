@@ -17,7 +17,7 @@ export default function TestAccounts({ accounts, onSelect }: TestAccountsProps) 
       <p className="text-sm text-gray-600 mb-3">
         Or try one of these...
       </p>
-      <div className="flex gap-18">
+      <div className="flex gap-14">
         {accounts.map((account) => (
           <button
             key={account.handle}
