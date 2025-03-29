@@ -3,7 +3,6 @@ import PostCard from "./PostCard";
 import type { Post } from "../types";
 
 interface TopPostsProps {
-  id: string;
   posts: Post[];
 }
 
