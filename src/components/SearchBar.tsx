@@ -17,6 +17,14 @@ interface ProfileSuggestion {
   avatar: string;
 }
 
+const handles = [
+  '@aoc.bsky.social',
+  '@mcuban.bsky.social',
+  '@karaswisher.bsky.social',
+  '@jay.bsky.team',
+  '@profgalloway.com',
+];
+
 export default function SearchBar({
   handle,
   setHandle,
@@ -29,6 +37,7 @@ export default function SearchBar({
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [currentHandleIndex, setCurrentHandleIndex] = useState(0);
   
   useEffect(() => {
     setSelectedIndex(-1);
@@ -69,6 +78,14 @@ export default function SearchBar({
 
     return () => clearTimeout(delayDebounce);
   }, [handle, loading]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentHandleIndex((prevIndex) => (prevIndex + 1) % handles.length);
+    }, 2000); // Change every 2 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSelect = (selectedHandle: string) => {
     // Ensure the handle starts with @
@@ -164,8 +181,8 @@ export default function SearchBar({
             ref={inputRef}
             value={handle}
             onChange={handleInputChange}
-            placeholder={placeholder}
-            className="flex-grow border p-2 rounded"
+            placeholder={handles[currentHandleIndex]}
+            className="flex-grow border p-2 rounded transition-opacity duration-1000 ease-in-out opacity-100"
             onFocus={handleFocus}
             onBlur={() => {
               setTimeout(() => setShowDropdown(false), 100);
