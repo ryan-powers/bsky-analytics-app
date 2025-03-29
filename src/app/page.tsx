@@ -104,7 +104,7 @@ export default function Home() {
               onSearch={handleFetchAnalytics}
               loading={loading}
               error={error}
-              placeholder={dataLoaded ? "@" : "@aoc.bsky.social"}
+              placeholder={dataLoaded ? "@" : "@user.bsky.social"}
             />
 
             {/* Suggested accounts - only visible when no profile is loaded */}

@@ -15,7 +15,7 @@ export default function TestAccounts({ accounts, onSelect }: TestAccountsProps) 
   return (
     <div className="mb-8 flex flex-col items-center">
       <p className="text-sm text-gray-600 mb-3">
-        Or try one of these...
+        Or try...
       </p>
       <div className="flex gap-14">
         {accounts.map((account) => (

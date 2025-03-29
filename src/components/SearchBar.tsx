@@ -159,7 +159,7 @@ export default function SearchBar({
   return (
     <div className="mb-6">
       <form onSubmit={handleSubmit} className="relative flex flex-col gap-2">
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center max-w-2xl mx-auto w-full">
           <input
             ref={inputRef}
             value={handle}
