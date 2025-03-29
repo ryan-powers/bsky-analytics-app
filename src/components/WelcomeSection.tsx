@@ -9,10 +9,9 @@ export default function WelcomeSection({ hasProfile, children }: WelcomeSectionP
   return (
     <div className={`${!hasProfile ? 'h-[80vh] flex flex-col justify-center' : ''}`}>
       {!hasProfile && (
-        <h1 className="text-center mb-8 text-xl text-gray-700 max-w-2xl mx-auto">
-          Welcome to <span className="font-bold">bskyStats.me</span>
-          <br />
-          A free tool for analyzing Bluesky posts and engagement for public accounts.
+        <h1 className="text-center mb-8 max-w-2xl mx-auto">
+          <div className="text-2xl text-gray-700">Welcome to <span className="font-bold">bskyStats.me</span></div>
+          <div className="text-xl text-gray-700">A free tool for analyzing Bluesky posts and engagement for public accounts.</div>
         </h1>
       )}
       {children}

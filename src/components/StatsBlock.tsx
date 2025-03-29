@@ -29,7 +29,7 @@ export default function StatsBlock({
   return (
     <div className="mb-6 bg-white p-6 rounded-lg shadow border text-gray-800">
       <h2 className="text-xl font-bold flex items-center gap-2 mb-4">
-        📊 Post Stats
+        📊 Summary 
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-10">
@@ -70,7 +70,7 @@ export default function StatsBlock({
           <div className="space-y-2 text-sm">
             <StatRow
               icon="⭐"
-              label="All Types"
+              label="Total"
               value={avgEngagement}
             />
             <StatRow icon="❤️" label="Likes" value={avgLikes} />

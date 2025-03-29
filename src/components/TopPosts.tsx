@@ -9,7 +9,7 @@ interface TopPostsProps {
 export default function TopPosts({ posts }: TopPostsProps) {
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Top Posts</h2>
+      <h2 className="text-xl font-bold">🏆 Top Posts</h2>
       <div className="relative">
         <div className="overflow-x-auto pb-4 hide-scrollbar">
           <div className="flex gap-4">

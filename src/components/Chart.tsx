@@ -96,7 +96,17 @@ export default function Chart({
               return value;
             }}
           />
-          <Tooltip />
+          <Tooltip
+            labelFormatter={(label) => (
+              <span style={{ fontWeight: "bold" }}>
+                {new Date(label).toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            )}
+          />
           <Legend />
           {showTotal && (
             <Line
@@ -104,7 +114,7 @@ export default function Chart({
               dataKey="total"
               stroke="#6366f1"
               name="Total"
-              strokeWidth={2}
+              strokeWidth={3}
             />
           )}
           {showLikes && (
@@ -113,7 +123,7 @@ export default function Chart({
               dataKey="likes"
               stroke="#ef4444"
               name="Likes"
-              strokeWidth={2}
+              strokeWidth={1}
             />
           )}
           {showReposts && (
@@ -122,7 +132,7 @@ export default function Chart({
               dataKey="reposts"
               stroke="#3b82f6"
               name="Reposts"
-              strokeWidth={2}
+              strokeWidth={1}
             />
           )}
           {showReplies && (
@@ -131,7 +141,7 @@ export default function Chart({
               dataKey="replies"
               stroke="#10b981"
               name="Replies"
-              strokeWidth={2}
+              strokeWidth={1}
             />
           )}
         </LineChart>

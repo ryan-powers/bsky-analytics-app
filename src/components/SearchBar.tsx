@@ -8,6 +8,7 @@ interface SearchBarProps {
   onSearch: (customHandle?: string) => void;
   loading: boolean;
   error?: string;
+  placeholder: string;
 }
 
 interface ProfileSuggestion {
@@ -22,6 +23,7 @@ export default function SearchBar({
   onSearch,
   loading,
   error,
+  placeholder,
 }: SearchBarProps) {
   const [suggestions, setSuggestions] = useState<ProfileSuggestion[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -162,7 +164,7 @@ export default function SearchBar({
             ref={inputRef}
             value={handle}
             onChange={handleInputChange}
-            placeholder="@"
+            placeholder={placeholder}
             className="flex-grow border p-2 rounded"
             onFocus={handleFocus}
             onBlur={() => {

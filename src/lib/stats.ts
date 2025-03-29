@@ -1,6 +1,7 @@
 import type { Post } from '../types';
 import type { EngagementBucket } from '../types';
 
+// Get daily engagement data
 export function groupPostsByDay(posts: Post[], daysBack: number): EngagementBucket[] {
     const now = new Date();
     const startDate = new Date();
@@ -37,7 +38,7 @@ export function groupPostsByDay(posts: Post[], daysBack: number): EngagementBuck
     return Object.values(buckets).sort((a, b) => a.date.localeCompare(b.date));
   }
 
-  // lib/stats.ts
+
 
 export const getDailyEngagementData = (buckets: EngagementBucket[]) => 
     buckets.map(b => ({ date: b.date, value: b.total }));
@@ -47,4 +48,29 @@ export const getDailyLikesData = (buckets: EngagementBucket[]) =>
   
 export const getDailyRepostsData = (buckets: EngagementBucket[]) => 
     buckets.map(b => ({ date: b.date, value: b.reposts }));
+
+
+// Get daily post counts
+export function getDailyPostCounts(posts: Post[], daysBack: number) {
+  const now = new Date();
+  const startDate = new Date();
+  startDate.setDate(now.getDate() - daysBack);
+
+  const dateMap: Record<string, number> = {};
+
+  posts.forEach((post) => {
+    const date = new Date(post.createdAt);
+    if (daysBack > 0 && date < startDate) return;
+
+    const key = date.toISOString().split('T')[0]; // "YYYY-MM-DD"
+    if (!dateMap[key]) {
+      dateMap[key] = 0;
+    }
+    dateMap[key]++;
+  });
+
+  return Object.entries(dateMap)
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+}
   

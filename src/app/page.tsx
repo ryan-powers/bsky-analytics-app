@@ -8,6 +8,7 @@ import {
   getDailyEngagementData,
   getDailyLikesData,
   getDailyRepostsData,
+  getDailyPostCounts,
 } from "@/lib/stats";
 import { SummaryCard } from "../components/SummaryCard";
 import TopPosts from "../components/TopPosts";
@@ -30,6 +31,8 @@ import {
 } from "../lib/analytics";
 import { fetchAnalytics } from "../lib/api";
 import WelcomeSection from "../components/WelcomeSection";
+import PostFrequencyChart from "../components/PostFrequencyChart";
+
 
 export default function Home() {
   const [handle, setHandle] = useState("");
@@ -54,6 +57,7 @@ export default function Home() {
   const dailyLikesData = getDailyLikesData(groupedData);
   const dailyRepostsData = getDailyRepostsData(groupedData);
   const dailyEngagementData = getDailyEngagementData(groupedData);
+  const postFrequencyData = getDailyPostCounts(posts, daysBack);
 
   const handleFetchAnalytics = (customHandle?: string) => {
     fetchAnalytics(customHandle || handle, {
@@ -91,7 +95,7 @@ export default function Home() {
       
       {/* Main Content */}
       <div className="flex-grow">
-        <div className="max-w-4xl mx-auto p-4">
+      <div className="max-w-5xl mx-auto px-6 py-4">
           <WelcomeSection hasProfile={!!profile}>
             {/* Input section with form */}
             <SearchBar
@@ -100,6 +104,7 @@ export default function Home() {
               onSearch={handleFetchAnalytics}
               loading={loading}
               error={error}
+              placeholder={dataLoaded ? "@" : "@jay.bsky.team"}
             />
 
             {/* Suggested accounts - only visible when no profile is loaded */}
@@ -189,6 +194,13 @@ export default function Home() {
               setShowReplies={setShowReplies}
             />
           )}
+
+          {/* Post Frequency Chart */}
+          {dataLoaded && (
+            <PostFrequencyChart data={postFrequencyData} />
+          )}
+
+          <br style={{ marginTop: '20px' }} />
 
           {/* Top Posts */}
           {posts.length > 0 && (
