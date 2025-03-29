@@ -36,6 +36,7 @@ export async function fetchUserData(handle: string) {
     }
   
     const postData = allPosts.map((item) => ({
+      id: item.post.uri.split('/').pop(),
       text: item.post.record.text,
       likes: item.post.likeCount || 0,
       reposts: item.post.repostCount || 0,

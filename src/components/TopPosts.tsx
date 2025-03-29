@@ -3,6 +3,7 @@ import PostCard from "./PostCard";
 import type { Post } from "../types";
 
 interface TopPostsProps {
+  id: string;
   posts: Post[];
 }
 
@@ -22,14 +23,22 @@ export default function TopPosts({ posts }: TopPostsProps) {
                   (a.likes + a.reposts + a.replies)
               )
               .slice(0, 10)
-              .map((post) => (
-                <div
-                  key={post.createdAt}
-                  className="w-[400px] flex-shrink-0"
-                >
-                  <PostCard {...post} />
-                </div>
-              ))}
+              .map((post) => {
+                if (!post.author.handle || !post.id) {
+                  return null; // Skip rendering if data is missing
+                }
+                return (
+                  <a
+                    key={post.createdAt}
+                    href={`https://bsky.app/profile/${post.author.handle}/post/${post.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-[400px] flex-shrink-0"
+                  >
+                    <PostCard {...post} />
+                  </a>
+                );
+              })}
           </div>
         </div>
       </div>
