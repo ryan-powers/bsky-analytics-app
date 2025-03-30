@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@atproto/api": "^0.14.10",
+    "@supabase/supabase-js": "^2.49.4",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "chart.js": "^4.4.8",
