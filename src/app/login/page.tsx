@@ -9,8 +9,13 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     setStatus('sending')
-    const { error } = await supabase.auth.signInWithOtp({ email })
-
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`  // 👈 redirect here
+      }
+    })
+  
     if (error) {
       setErrorMessage(error.message)
       setStatus('error')
